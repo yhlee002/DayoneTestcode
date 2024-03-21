@@ -172,4 +172,5 @@ public static Stream<Arguments> parameterizedTestParameters() {
 
 > Cf. 이 때, `Arguments`는 `org.junit.jupiter.params.provider` 패키지에 속한 클래스이다.
 
+## 3. Mockito
 
