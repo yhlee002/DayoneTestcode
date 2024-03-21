@@ -113,4 +113,63 @@ class JUnitTest {
     }
 ```
  위와 같이 작성시 아래와 같이 명시한 텍스트로 테스트명이 출력되는 것을 볼 수 있다.
+
 ![img.png](src/main/resources/static/img/img2.png)
+
+## 2. RepeatedTest, ParameterizedTest
+ 테스트를 반복 실행하는데 사용되는 어노테이션이다.
+
+### RepeatedTest
+ 테스트를 반복 실행하기 위해 사용된다. 단순 반복이기 때문에 안정성 및 견고성을 테스트하기 위해 사용된다.
+ 
+아래 코드 실행시 동일한 테스트가 5회 단순 반복된다.
+```java
+@DisplayName("덧셈을 5회 단순 반복 테스트")
+@RepeatedTest(5)
+public void repeatedAddTest() {
+    // given
+    MyCalculator cal = new MyCalculator();
+    
+    // when
+    cal.add(10.0);
+    
+    // then
+    Assertions.assertEquals(10.0, cal.getResult());
+}
+```
+
+### ParameterizedTest
+ 매개변수 집합을 이용해 테스트를 실행시킬 때 사용된다.
+ 일반적으로 샘플 데이터를 제공하는 `@ValueSource`, `@EnumSource`, `@MethodSource`, `@CsvSource`, `@CsvFileSource` 등과 함께 사용된다.
+
+ 아래는 주로 많이 사용되는 `@MethodSource`를 이용해 매개변수 집합을 전달받는 테스트이다. 
+ `@MethodSource` 사용시 인자 집합을 전달해주는 메서드명을 인자로 전달해야하며, 인자 집합을 전달해주는 메서드는 `Stream<Arguments`> 타입으로 결과를 반환해야 한다.
+```java
+@DisplayName("매개변수를 이용한 6회 반복 테스트")
+@ParameterizedTest @MethodSource("parameterizedTestParameters")
+public void parameterizedTest(Double addVal, Double expectVal) {
+    // given
+    MyCalculator cal = new MyCalculator(0.0);
+
+    // when
+    cal.add(addVal);
+
+    // then
+    Assertions.assertEquals(expectVal, cal.getResult());
+}
+
+public static Stream<Arguments> parameterizedTestParameters() {
+    return Stream.of(
+        Arguments.of(10.0, 10.0),
+        Arguments.of(2.0, 2.0),
+        Arguments.of(4.0, 4.0),
+        Arguments.of(5.0, 5.0),
+        Arguments.of(17.0, 17.0),
+        Arguments.of(23.0, 23.0)
+    );
+}
+```
+
+> Cf. 이 때, `Arguments`는 `org.junit.jupiter.params.provider` 패키지에 속한 클래스이다.
+
+
