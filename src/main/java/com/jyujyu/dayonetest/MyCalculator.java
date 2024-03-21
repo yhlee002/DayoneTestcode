@@ -15,6 +15,7 @@ public class MyCalculator {
     public MyCalculator add(Double number) {
         this.result += number;
         return this;
+        // method chaining을 위해 this를 넘겨주는 형태로 작성
     }
 
     public MyCalculator minus(Double number) {
