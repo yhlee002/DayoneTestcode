@@ -81,3 +81,36 @@ Assertions.assertTimeoutPreemptively(Duration.ofSeconds(3), () -> {
 - `assertArrayEquals()` 두 배열이 동일함을 확인
 - `assertDoesNotThrow()` 예외가 발생하지 않음을 확인
 - `assertLinesMatch()` 두 문자열 리스트가 동일한 라인 순서와 패턴을 갖음을 확인
+
+## 3. DisplayNameGeneration, DisplayName
+
+### DisplayNameGeneration
+
+만약, 두 어노테이션이 모두 사용되었다면 `DisplayNameGeneration` 보다 `DisplayName` 이 우선된다.
+
+클래스에 붙이는 어노테이션이다. `DisplayNameGenerator`의 하위 클래스를 인자로 받아, 일괄적으로 테스트명들을 수정해 보여준다.
+```java
+@DisplayNameGeneration(DisplayGenerator.ReplaceUnderscores.class)
+class JUnitTest {
+    
+    @Test
+    public void assert_Equals_Test() {
+        ...
+    }
+}
+```
+ 위와 같이 `DisplayNameGenerator.ReplaceUnderscores` 규칙을 이용하면 아래와 같이 언더스코어(`_`)를 띄어쓰기로 대치하여 보여준다.
+
+![img.png](src/main/resources/static/img/img.png)
+
+### DisplayName
+ 테스트 메서드에 붙이는 어노테이션으로, 개별 테스트의 테스트명을 원하는 텍스트로 보이게끔 하기 위해 사용한다.
+```java
+    @Test
+    @DisplayName("assertEquals 테스트")
+    public void assertEqualsTest() {
+        ...
+    }
+```
+ 위와 같이 작성시 아래와 같이 명시한 텍스트로 테스트명이 출력되는 것을 볼 수 있다.
+![img.png](src/main/resources/static/img/img2.png)

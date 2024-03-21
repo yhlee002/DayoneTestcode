@@ -1,14 +1,14 @@
 package com.jyujyu.dayonetest;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.Duration;
 import java.util.List;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class JUnitPracticeTest {
 
-    @Test
+    @Test @DisplayName("assertEquals 테스트")
     public void assertEqualsTest() {
         String expect = "Something";
         String actual = "Something";
@@ -16,7 +16,7 @@ public class JUnitPracticeTest {
         Assertions.assertEquals(expect, actual);
     }
 
-    @Test
+    @Test @DisplayName("assertNotEquals 테스트")
     public void assertNotEquals() {
         String expect = "Something";
         String actual = "Nothing";
@@ -24,7 +24,7 @@ public class JUnitPracticeTest {
         Assertions.assertNotEquals(expect, actual);
     }
 
-    @Test
+    @Test @DisplayName("assertTrue 테스트")
     public void assertTrue() {
         Integer a = 10;
         Integer b = 10;
@@ -32,7 +32,7 @@ public class JUnitPracticeTest {
         Assertions.assertTrue(a.equals(b));
     }
 
-    @Test
+    @Test @DisplayName("assertFalse 테스트")
     public void assertFalse() {
         Integer a = 10;
         Integer b = 20;
@@ -40,26 +40,26 @@ public class JUnitPracticeTest {
         Assertions.assertFalse(a.equals(b));
     }
 
-    @Test
+    @Test @DisplayName("assertThrows 테스트")
     public void assertThrows() {
         Assertions.assertThrows(RuntimeException.class, () -> {
             throw new RuntimeException("임의로 발생시킨 에러");
         });
     }
 
-    @Test
+    @Test @DisplayName("assertNull 테스트")
     public void assertNull() {
         String val = null;
         Assertions.assertNull(val);
     }
 
-    @Test
+    @Test @DisplayName("assertNotNull 테스트")
     public void assertNotNull() {
         String val = "Hello";
         Assertions.assertNotNull(val);
     }
 
-    @Test
+    @Test @DisplayName("assertIterableEquals 테스트")
     public void assertIterableEquals() {
         List<Integer> list1 = List.of(1, 2);
         List<Integer> list2 = List.of(1, 2);
@@ -67,7 +67,7 @@ public class JUnitPracticeTest {
         Assertions.assertIterableEquals(list1, list2);
     }
 
-    @Test()
+    @Test() @DisplayName("assertAll 테스트")
     public void assertAll() {
         String expect = "Something";
         String actual = "Something";
@@ -81,21 +81,21 @@ public class JUnitPracticeTest {
         ));
     }
 
-    @Test
+    @Test @DisplayName("assertTimeout 테스트")
     public void assertTimeout() {
         Assertions.assertTimeout(Duration.ofSeconds(3), () -> {
             Thread.sleep(2000);
         });
     }
 
-    @Test
+    @Test @DisplayName("assertTimeoutPreemptively 테스트")
     public void assertTimeoutPreemptively() {
         Assertions.assertTimeoutPreemptively(Duration.ofSeconds(3), () -> {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         });
     }
 
-    @Test
+    @Test @DisplayName("assertSame 테스트")
     public void assertSame() {
         List<String> a = List.of("a", "b");
         List<String> b = a;
@@ -103,7 +103,7 @@ public class JUnitPracticeTest {
         Assertions.assertSame(a, b);
     }
 
-    @Test
+    @Test @DisplayName("assertNotSame 테스트")
     public void assertNotSame() {
         List<String> a = List.of("a", "b");
         List<String> b = List.of("a", "b");
