@@ -116,7 +116,7 @@ class JUnitTest {
 
 ![img.png](src/main/resources/static/img/img2.png)
 
-## 2. RepeatedTest, ParameterizedTest
+## 4. RepeatedTest, ParameterizedTest
  테스트를 반복 실행하는데 사용되는 어노테이션이다.
 
 ### RepeatedTest
