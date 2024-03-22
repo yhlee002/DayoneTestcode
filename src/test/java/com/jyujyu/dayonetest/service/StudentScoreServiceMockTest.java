@@ -1,7 +1,9 @@
 package com.jyujyu.dayonetest.service;
 
+import com.jyujyu.dayonetest.MyCalculator;
 import com.jyujyu.dayonetest.model.StudentFail;
 import com.jyujyu.dayonetest.model.StudentPass;
+import com.jyujyu.dayonetest.model.StudentScore;
 import com.jyujyu.dayonetest.repository.StudentFailRepository;
 import com.jyujyu.dayonetest.repository.StudentPassRepository;
 import com.jyujyu.dayonetest.repository.StudentScoreRepository;
@@ -10,6 +12,7 @@ import com.jyujyu.dayonetest.response.ExamPassStudentResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.List;
@@ -68,6 +71,31 @@ public class StudentScoreServiceMockTest {
         Integer givenEngScore = 100;
         Integer givenMathScore = 60;
 
+        // ArgumentCaptor<T>: 메서드 호출시 전달되는 인자를 검증하고 활용도를 높이기 위해 캡쳐한다.
+        // 두 클래스들에 대한 ArgumentCaptor 인스턴스 생성
+        ArgumentCaptor<StudentScore> studentScoreArgumentCaptor = ArgumentCaptor.forClass(StudentScore.class);
+        ArgumentCaptor<StudentPass> studentPassArgumentCaptor = ArgumentCaptor.forClass(StudentPass.class);
+
+        // saveScore시 전달한 인자가 잘 사용되는지 확인하기 위한 테스트에서 비교를 위한 인스턴스 생성
+        StudentScore expectedStudentScore = StudentScore.builder()
+                .studentName(givenStudentName)
+                    .exam(givenExam)
+                        .korScore(givenKorScore)
+                            .englishScore(givenEngScore)
+                                .mathScore(givenMathScore)
+                                    .build();
+
+        StudentPass expectedStudentPass = StudentPass.builder()
+                .studentName(givenStudentName)
+                    .exam(givenExam)
+                        .avgScore(new MyCalculator(0.0)
+                            .add(givenKorScore.doubleValue())
+                            .add(givenEngScore.doubleValue())
+                            .add(givenMathScore.doubleValue())
+                            .divide(3.0)
+                            .getResult())
+                            .build();
+
         studentScoreService.saveScore(
             givenStudentName,
             givenExam,
@@ -77,8 +105,23 @@ public class StudentScoreServiceMockTest {
         );
 
         // then
-        Mockito.verify(studentScoreRepository, Mockito.times(1)).save(Mockito.any());
-        Mockito.verify(studentPassRepository, Mockito.times(1)).save(Mockito.any());
+        // ArgumentCaptor를 이용해 Repository에서 save가 일어날 때 인자를 캡쳐해 전달된 인자와 일치하는지 검증
+        Mockito.verify(studentScoreRepository, Mockito.times(1)).save(studentScoreArgumentCaptor.capture());
+
+        StudentScore capturedStudentScore = studentScoreArgumentCaptor.getValue();
+        Assertions.assertEquals(expectedStudentScore.getStudentName(), capturedStudentScore.getStudentName());
+        Assertions.assertEquals(expectedStudentScore.getExam(), capturedStudentScore.getExam());
+        Assertions.assertEquals(expectedStudentScore.getKorScore(), capturedStudentScore.getKorScore());
+        Assertions.assertEquals(expectedStudentScore.getEnglishScore(), capturedStudentScore.getEnglishScore());
+        Assertions.assertEquals(expectedStudentScore.getMathScore(), capturedStudentScore.getMathScore());
+
+        Mockito.verify(studentPassRepository, Mockito.times(1)).save(studentPassArgumentCaptor.capture());
+
+        StudentPass capturedStudentPass = studentPassArgumentCaptor.getValue();
+        Assertions.assertEquals(expectedStudentPass.getStudentName(), capturedStudentPass.getStudentName());
+        Assertions.assertEquals(expectedStudentPass.getExam(), capturedStudentPass.getExam());
+        Assertions.assertEquals(expectedStudentPass.getAvgScore(), capturedStudentPass.getAvgScore());
+
         Mockito.verify(studentFailRepository, Mockito.times(0)).save(Mockito.any());
     }
 
@@ -103,6 +146,28 @@ public class StudentScoreServiceMockTest {
         Integer givenEngScore = 40;
         Integer givenMathScore = 60;
 
+        StudentScore expectedStudentScore = StudentScore.builder()
+            .studentName(givenStudentName)
+            .exam(givenExam)
+            .korScore(givenKorScore)
+            .englishScore(givenEngScore)
+            .mathScore(givenMathScore)
+            .build();
+
+        StudentFail expectedStudentFail = StudentFail.builder()
+            .studentName(givenStudentName)
+            .exam(givenExam)
+            .avgScore(new MyCalculator(0.0)
+                .add(givenKorScore.doubleValue())
+                .add(givenEngScore.doubleValue())
+                .add(givenMathScore.doubleValue())
+                .divide(3.0)
+                .getResult())
+            .build();
+
+        ArgumentCaptor<StudentScore> studentScoreArgumentCaptor = ArgumentCaptor.forClass(StudentScore.class);
+        ArgumentCaptor<StudentFail> studentFailArgumentCaptor = ArgumentCaptor.forClass(StudentFail.class);
+
         studentScoreService.saveScore(
             givenStudentName,
             givenExam,
@@ -112,9 +177,22 @@ public class StudentScoreServiceMockTest {
         );
 
         // then
-        Mockito.verify(studentScoreRepository, Mockito.times(1)).save(Mockito.any());
+        Mockito.verify(studentScoreRepository, Mockito.times(1)).save(studentScoreArgumentCaptor.capture());
+
+        StudentScore capturedStudentScore = studentScoreArgumentCaptor.getValue();
+        Assertions.assertEquals(expectedStudentScore.getStudentName(), capturedStudentScore.getStudentName());
+        Assertions.assertEquals(expectedStudentScore.getExam(), capturedStudentScore.getExam());
+        Assertions.assertEquals(expectedStudentScore.getKorScore(), capturedStudentScore.getKorScore());
+        Assertions.assertEquals(expectedStudentScore.getEnglishScore(), capturedStudentScore.getEnglishScore());
+        Assertions.assertEquals(expectedStudentScore.getMathScore(), capturedStudentScore.getMathScore());
+
         Mockito.verify(studentPassRepository, Mockito.times(0)).save(Mockito.any());
-        Mockito.verify(studentFailRepository, Mockito.times(1)).save(Mockito.any());
+        Mockito.verify(studentFailRepository, Mockito.times(1)).save(studentFailArgumentCaptor.capture());
+
+        StudentFail capturedStudentFail = studentFailArgumentCaptor.getValue();
+        Assertions.assertEquals(expectedStudentFail.getStudentName(), capturedStudentFail.getStudentName());
+        Assertions.assertEquals(expectedStudentFail.getExam(), capturedStudentFail.getExam());
+        Assertions.assertEquals(expectedStudentFail.getAvgScore(), capturedStudentFail.getAvgScore());
     }
 
     @Test
