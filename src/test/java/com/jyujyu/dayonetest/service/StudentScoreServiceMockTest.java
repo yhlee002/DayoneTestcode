@@ -4,6 +4,7 @@ import com.jyujyu.dayonetest.MyCalculator;
 import com.jyujyu.dayonetest.model.StudentFail;
 import com.jyujyu.dayonetest.model.StudentPass;
 import com.jyujyu.dayonetest.model.StudentScore;
+import com.jyujyu.dayonetest.model.StudentScoreTestDataBuilder;
 import com.jyujyu.dayonetest.repository.StudentFailRepository;
 import com.jyujyu.dayonetest.repository.StudentPassRepository;
 import com.jyujyu.dayonetest.repository.StudentScoreRepository;
@@ -80,32 +81,25 @@ public class StudentScoreServiceMockTest {
         ArgumentCaptor<StudentPass> studentPassArgumentCaptor = ArgumentCaptor.forClass(StudentPass.class);
 
         // saveScore시 전달한 인자가 잘 사용되는지 확인하기 위한 테스트에서 비교를 위한 인스턴스 생성
-        StudentScore expectedStudentScore = StudentScore.builder()
-                .studentName(givenStudentName)
-                    .exam(givenExam)
-                        .korScore(givenKorScore)
-                            .englishScore(givenEngScore)
-                                .mathScore(givenMathScore)
-                                    .build();
-
+        StudentScore expectedStudentScore = StudentScoreTestDataBuilder.passed().build();
         StudentPass expectedStudentPass = StudentPass.builder()
-                .studentName(givenStudentName)
-                    .exam(givenExam)
+                .studentName(expectedStudentScore.getStudentName())
+                    .exam(expectedStudentScore.getExam())
                         .avgScore(new MyCalculator(0.0)
-                            .add(givenKorScore.doubleValue())
-                            .add(givenEngScore.doubleValue())
-                            .add(givenMathScore.doubleValue())
+                            .add(expectedStudentScore.getKorScore().doubleValue())
+                            .add(expectedStudentScore.getEnglishScore().doubleValue())
+                            .add(expectedStudentScore.getMathScore().doubleValue())
                             .divide(3.0)
                             .getResult())
                             .build();
 
         // when
         studentScoreService.saveScore(
-            givenStudentName,
-            givenExam,
-            givenKorScore,
-            givenEngScore,
-            givenMathScore
+            expectedStudentScore.getStudentName(),
+            expectedStudentScore.getExam(),
+            expectedStudentScore.getKorScore(),
+            expectedStudentScore.getEnglishScore(),
+            expectedStudentScore.getMathScore()
         );
 
         // then
@@ -133,27 +127,14 @@ public class StudentScoreServiceMockTest {
     @DisplayName("성적 저장 로직 검증 / 60점 이상인 경우 ")
     public void saveScoreMockTest2() {
         // given
-        String givenStudentName = "yhlee";
-        String givenExam = "testexam";
-        Integer givenKorScore = 40;
-        Integer givenEngScore = 40;
-        Integer givenMathScore = 60;
-
-        StudentScore expectedStudentScore = StudentScore.builder()
-            .studentName(givenStudentName)
-            .exam(givenExam)
-            .korScore(givenKorScore)
-            .englishScore(givenEngScore)
-            .mathScore(givenMathScore)
-            .build();
-
+        StudentScore expectedStudentScore = StudentScoreTestDataBuilder.failed().build();
         StudentFail expectedStudentFail = StudentFail.builder()
-            .studentName(givenStudentName)
-            .exam(givenExam)
+            .studentName(expectedStudentScore.getStudentName())
+            .exam(expectedStudentScore.getExam())
             .avgScore(new MyCalculator(0.0)
-                .add(givenKorScore.doubleValue())
-                .add(givenEngScore.doubleValue())
-                .add(givenMathScore.doubleValue())
+                .add(expectedStudentScore.getKorScore().doubleValue())
+                .add(expectedStudentScore.getEnglishScore().doubleValue())
+                .add(expectedStudentScore.getMathScore().doubleValue())
                 .divide(3.0)
                 .getResult())
             .build();
@@ -163,11 +144,11 @@ public class StudentScoreServiceMockTest {
 
         // when
         studentScoreService.saveScore(
-            givenStudentName,
-            givenExam,
-            givenKorScore,
-            givenEngScore,
-            givenMathScore
+            expectedStudentScore.getStudentName(),
+            expectedStudentScore.getExam(),
+            expectedStudentScore.getKorScore(),
+            expectedStudentScore.getEnglishScore(),
+            expectedStudentScore.getMathScore()
         );
 
         // then
