@@ -69,12 +69,6 @@ public class StudentScoreServiceMockTest {
     @DisplayName("성적 저장 로직 검증 / 60점 이상인 경우 ")
     public void saveScoreMockTest() {
         // given
-        String givenStudentName = "yhlee";
-        String givenExam = "testexam";
-        Integer givenKorScore = 80;
-        Integer givenEngScore = 100;
-        Integer givenMathScore = 60;
-
         // ArgumentCaptor<T>: 메서드 호출시 전달되는 인자를 검증하고 활용도를 높이기 위해 캡쳐한다.
         // 두 클래스들에 대한 ArgumentCaptor 인스턴스 생성
         ArgumentCaptor<StudentScore> studentScoreArgumentCaptor = ArgumentCaptor.forClass(StudentScore.class);
