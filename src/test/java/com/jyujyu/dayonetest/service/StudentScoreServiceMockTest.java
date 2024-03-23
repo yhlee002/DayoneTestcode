@@ -118,7 +118,7 @@ public class StudentScoreServiceMockTest {
     }
 
     @Test
-    @DisplayName("성적 저장 로직 검증 / 60점 이상인 경우 ")
+    @DisplayName("성적 저장 로직 검증 / 60점 미만인 경우 ")
     public void saveScoreMockTest2() {
         // given
         StudentScore expectedStudentScore = StudentScoreTestDataBuilder.failed().build();
