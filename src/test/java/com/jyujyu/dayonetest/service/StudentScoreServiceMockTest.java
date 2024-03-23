@@ -1,10 +1,7 @@
 package com.jyujyu.dayonetest.service;
 
 import com.jyujyu.dayonetest.MyCalculator;
-import com.jyujyu.dayonetest.model.StudentFail;
-import com.jyujyu.dayonetest.model.StudentPass;
-import com.jyujyu.dayonetest.model.StudentScore;
-import com.jyujyu.dayonetest.model.StudentScoreTestDataBuilder;
+import com.jyujyu.dayonetest.model.*;
 import com.jyujyu.dayonetest.repository.StudentFailRepository;
 import com.jyujyu.dayonetest.repository.StudentPassRepository;
 import com.jyujyu.dayonetest.repository.StudentScoreRepository;
@@ -75,7 +72,7 @@ public class StudentScoreServiceMockTest {
         ArgumentCaptor<StudentPass> studentPassArgumentCaptor = ArgumentCaptor.forClass(StudentPass.class);
 
         // saveScore시 전달한 인자가 잘 사용되는지 확인하기 위한 테스트에서 비교를 위한 인스턴스 생성
-        StudentScore expectedStudentScore = StudentScoreTestDataBuilder.passed().build();
+        StudentScore expectedStudentScore = StudentScoreFixture.passed();
         StudentPass expectedStudentPass = StudentPass.builder()
                 .studentName(expectedStudentScore.getStudentName())
                     .exam(expectedStudentScore.getExam())
@@ -118,10 +115,10 @@ public class StudentScoreServiceMockTest {
     }
 
     @Test
-    @DisplayName("성적 저장 로직 검증 / 60점 미만인 경우 ")
+    @DisplayName("성적 저장 로직 검증 / 60점 미만 경우 ")
     public void saveScoreMockTest2() {
         // given
-        StudentScore expectedStudentScore = StudentScoreTestDataBuilder.failed().build();
+        StudentScore expectedStudentScore = StudentScoreFixture.failed();
         StudentFail expectedStudentFail = StudentFail.builder()
             .studentName(expectedStudentScore.getStudentName())
             .exam(expectedStudentScore.getExam())
