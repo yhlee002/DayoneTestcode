@@ -8,8 +8,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@RequiredArgsConstructor
-@RestController
+@RequiredArgsConstructor @RestController
 public class ScoreApi {
 
   private final StudentScoreService studentScoreService;
