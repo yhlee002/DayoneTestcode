@@ -3,12 +3,16 @@ package com.jyujyu.dayonetest;
 import com.jyujyu.dayonetest.service.KafkaConsumerService;
 import com.jyujyu.dayonetest.service.KafkaProducerService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 
+@Order(0)
+@DirtiesContext
 public class KafkaConsumaerApplicationTests extends IntegrationTest {
 
     @Autowired
@@ -30,7 +34,7 @@ public class KafkaConsumaerApplicationTests extends IntegrationTest {
         var stringCaptor = ArgumentCaptor.forClass(String.class);
         Mockito.verify(kafkaConsumerService, Mockito.timeout(5000).times(1))
             .process(stringCaptor.capture());
-
+        System.out.println("*****************" + stringCaptor.getValue());
         Assertions.assertEquals(expectValue, stringCaptor.getValue());
     }
 }
