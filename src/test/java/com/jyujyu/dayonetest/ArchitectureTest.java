@@ -93,5 +93,7 @@ public class ArchitectureTest {
             .that().resideInAnyPackage("..config")
             .should().haveSimpleNameEndingWith("Config")
             .andShould().beAnnotatedWith(Configuration.class);
+
+        rule.check(javaClasses);
     }
 }
