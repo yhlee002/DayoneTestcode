@@ -15,26 +15,24 @@ import org.springframework.test.annotation.DirtiesContext;
 @DirtiesContext
 public class KafkaConsumaerApplicationTests extends IntegrationTest {
 
-    @Autowired
-    private KafkaProducerService kafkaProducerService;
+  @Autowired private KafkaProducerService kafkaProducerService;
 
-    // @MockBean : Spring Context를 로드했을 때 어떤 빈을 목킹하고 싶을 때 사용하는 어노테이션
-    @MockBean
-    private KafkaConsumerService kafkaConsumerService;
+  // @MockBean : Spring Context를 로드했을 때 어떤 빈을 목킹하고 싶을 때 사용하는 어노테이션
+  @MockBean private KafkaConsumerService kafkaConsumerService;
 
-    @Test
-    public void kafkaSendAndConsumeTest() {
-        String topic = "test-topic";
-        String expectValue = "expect-value";
+  @Test
+  public void kafkaSendAndConsumeTest() {
+    String topic = "test-topic";
+    String expectValue = "expect-value";
 
-        // when
-        kafkaProducerService.send(topic, expectValue);
+    // when
+    kafkaProducerService.send(topic, expectValue);
 
-        // then
-        var stringCaptor = ArgumentCaptor.forClass(String.class);
-        Mockito.verify(kafkaConsumerService, Mockito.timeout(5000).times(1))
-            .process(stringCaptor.capture());
-        System.out.println("*****************" + stringCaptor.getValue());
-        Assertions.assertEquals(expectValue, stringCaptor.getValue());
-    }
+    // then
+    var stringCaptor = ArgumentCaptor.forClass(String.class);
+    Mockito.verify(kafkaConsumerService, Mockito.timeout(5000).times(1))
+        .process(stringCaptor.capture());
+    System.out.println("*****************" + stringCaptor.getValue());
+    Assertions.assertEquals(expectValue, stringCaptor.getValue());
+  }
 }

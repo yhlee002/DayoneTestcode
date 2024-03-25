@@ -2,44 +2,42 @@ package com.jyujyu.dayonetest;
 
 public class MyCalculator {
 
-    private Double result;
+  private Double result;
 
-    public MyCalculator() {
-        this.result = 0.0;
-    }
+  public MyCalculator() {
+    this.result = 0.0;
+  }
 
-    public MyCalculator(Double result) {
-        this.result = result;
-    }
+  public MyCalculator(Double result) {
+    this.result = result;
+  }
 
-    public MyCalculator add(Double number) {
-        this.result += number;
-        return this;
-        // method chaining을 위해 this를 넘겨주는 형태로 작성
-    }
+  public MyCalculator add(Double number) {
+    this.result += number;
+    return this;
+    // method chaining을 위해 this를 넘겨주는 형태로 작성
+  }
 
-    public MyCalculator minus(Double number) {
-        this.result -= number;
-        return this;
-    }
+  public MyCalculator minus(Double number) {
+    this.result -= number;
+    return this;
+  }
 
-    public MyCalculator multiply(Double number) {
-        this.result *= number;
-        return this;
-    }
+  public MyCalculator multiply(Double number) {
+    this.result *= number;
+    return this;
+  }
 
-    public MyCalculator divide(Double number) {
-        if (number == 0.0) throw new ZeroDivisionException();
+  public MyCalculator divide(Double number) {
+    if (number == 0.0) throw new ZeroDivisionException();
 
-        this.result /= number;
-        return this;
-    }
+    this.result /= number;
+    return this;
+  }
 
-    public Double getResult() {
-        return this.result;
-    }
+  public Double getResult() {
+    return this.result;
+  }
 
-    public static class ZeroDivisionException extends RuntimeException {
-
-    }
+  public static class ZeroDivisionException extends RuntimeException {}
 }

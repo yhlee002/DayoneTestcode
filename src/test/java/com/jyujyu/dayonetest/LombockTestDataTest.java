@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 
 public class LombockTestDataTest {
 
-    @Test
-    public void testDataTest() {
-        TestData testData = new TestData();
+  @Test
+  public void testDataTest() {
+    TestData testData = new TestData();
 
-        testData.setName("jyujyu");
-        Assertions.assertEquals("jyujyu", testData.getName());
-    }
+    testData.setName("jyujyu");
+    Assertions.assertEquals("jyujyu", testData.getName());
+  }
 }

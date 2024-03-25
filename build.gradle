@@ -4,6 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.4'
     id 'jacoco'
     id 'org.sonarqube' version '4.0.0.2929'
+    id 'com.diffplug.spotless' version '6.12.0'
 }
 
 group = 'com.jyujyu.dayonetest'
@@ -113,5 +114,16 @@ sonar {
         property("sonar.projectKey", "dayonetest")
         property("sonar.projectName", "dayonetest")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/jacoco/jacoco.xml")
+    }
+
+    spotless {
+        java {
+            googleJavaFormat()
+
+            removeUnusedImports() // 사용하지 않는 import 제거
+            trimTrailingWhitespace() // 공백이 2칸이상 존재하거나, 앞 뒤로 불필요한 공백 존재시 제거
+            indentWithSpaces(4) // 들여쓰기가 탭이 아닌 띄어쓰기(4칸)으로 변경
+            endWithNewline() // 마지막 줄을 공백으로 종료
+        }
     }
 }

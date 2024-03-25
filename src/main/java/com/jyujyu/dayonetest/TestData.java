@@ -6,6 +6,5 @@ import lombok.Setter;
 @Setter
 @Getter
 public class TestData {
-    private String name;
-
+  private String name;
 }
