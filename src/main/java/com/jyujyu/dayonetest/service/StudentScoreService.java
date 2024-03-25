@@ -7,8 +7,8 @@ import com.jyujyu.dayonetest.model.StudentScore;
 import com.jyujyu.dayonetest.repository.StudentFailRepository;
 import com.jyujyu.dayonetest.repository.StudentPassRepository;
 import com.jyujyu.dayonetest.repository.StudentScoreRepository;
-import com.jyujyu.dayonetest.response.ExamFailStudentResponse;
-import com.jyujyu.dayonetest.response.ExamPassStudentResponse;
+import com.jyujyu.dayonetest.controller.response.ExamFailStudentResponse;
+import com.jyujyu.dayonetest.controller.response.ExamPassStudentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

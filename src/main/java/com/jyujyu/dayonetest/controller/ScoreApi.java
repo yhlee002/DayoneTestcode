@@ -1,8 +1,8 @@
 package com.jyujyu.dayonetest.controller;
 
-import com.jyujyu.dayonetest.request.SaveExamScoreRequest;
-import com.jyujyu.dayonetest.response.ExamFailStudentResponse;
-import com.jyujyu.dayonetest.response.ExamPassStudentResponse;
+import com.jyujyu.dayonetest.controller.request.SaveExamScoreRequest;
+import com.jyujyu.dayonetest.controller.response.ExamFailStudentResponse;
+import com.jyujyu.dayonetest.controller.response.ExamPassStudentResponse;
 import com.jyujyu.dayonetest.service.StudentScoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

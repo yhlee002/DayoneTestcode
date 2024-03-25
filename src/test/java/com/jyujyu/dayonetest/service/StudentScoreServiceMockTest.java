@@ -1,12 +1,11 @@
 package com.jyujyu.dayonetest.service;
 
-import com.jyujyu.dayonetest.MyCalculator;
 import com.jyujyu.dayonetest.model.*;
 import com.jyujyu.dayonetest.repository.StudentFailRepository;
 import com.jyujyu.dayonetest.repository.StudentPassRepository;
 import com.jyujyu.dayonetest.repository.StudentScoreRepository;
-import com.jyujyu.dayonetest.response.ExamFailStudentResponse;
-import com.jyujyu.dayonetest.response.ExamPassStudentResponse;
+import com.jyujyu.dayonetest.controller.response.ExamFailStudentResponse;
+import com.jyujyu.dayonetest.controller.response.ExamPassStudentResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

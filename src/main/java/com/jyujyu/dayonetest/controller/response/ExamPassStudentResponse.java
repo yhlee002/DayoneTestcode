@@ -1,4 +1,4 @@
-package com.jyujyu.dayonetest.response;
+package com.jyujyu.dayonetest.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

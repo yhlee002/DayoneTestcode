@@ -1,4 +1,4 @@
-package com.jyujyu.dayonetest.request;
+package com.jyujyu.dayonetest.controller.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
