@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class ArchitectureTest {
 
@@ -93,6 +94,72 @@ public class ArchitectureTest {
             .that().resideInAnyPackage("..config")
             .should().haveSimpleNameEndingWith("Config")
             .andShould().beAnnotatedWith(Configuration.class);
+
+        rule.check(javaClasses);
+    }
+
+    @Test
+    @DisplayName("controller는 Service와 Request/Response를 사용할 수 있다.")
+    public void controllerDependencyTest() {
+        ArchRule rule = classes()
+            .that().resideInAnyPackage("..controller")
+            .should().dependOnClassesThat()
+            .resideInAnyPackage("..request..", "..response..", "..service..");
+
+        rule.check(javaClasses);
+    }
+
+    @Test
+    @DisplayName("controller는 의존되지 않는다.")
+    public void controllerDependencyTest2() {
+        ArchRule rule = classes()
+            .that().resideInAnyPackage("..controller")
+            .should().onlyHaveDependentClassesThat().resideInAnyPackage("..controller");
+
+        rule.check(javaClasses);
+    }
+
+    @Test
+    @DisplayName("controller는 model을 사용할 수 없다.")
+    public void controllerDependencyTest3() {
+        ArchRule rule = noClasses()
+            .that().resideInAnyPackage("..controller")
+            .should().dependOnClassesThat()
+            .resideInAnyPackage("..model..");
+        // dependOnClassesThat() : 뒤에 이어지는 클래스들에 의존성을 가진다는 의미
+        // classes() -> noClasses() : 아래 조건문에 대한 부정형이 된다.
+
+        rule.check(javaClasses);
+    }
+
+    @Test
+    @DisplayName("service는 controller를 의존하면 안된다.")
+    public void serviceDependencyTest() {
+        ArchRule rule = noClasses()
+            .that().resideInAnyPackage("..service..")
+            .should().dependOnClassesThat().resideInAnyPackage("..controller");
+
+        rule.check(javaClasses);
+    }
+
+    @Test
+    @DisplayName("model은 오직 service와 repository에 의해 의존된다.")
+    public void modelDependencyTest() {
+        ArchRule rule = classes()
+            .that().resideInAnyPackage("..model..")
+            .should().onlyHaveDependentClassesThat()
+            .resideInAnyPackage("..repository..", "..service..", "..model..");
+
+        rule.check(javaClasses);
+    }
+
+    @Test
+    @DisplayName("model은 아무것도 의존하지 않는다.")
+    public void modelDependencyTest2() {
+        ArchRule rule = classes()
+            .that().resideInAnyPackage("..model..")
+            .should().onlyDependOnClassesThat()
+            .resideInAnyPackage("..model..", "java..", "jakarta..");
 
         rule.check(javaClasses);
     }
