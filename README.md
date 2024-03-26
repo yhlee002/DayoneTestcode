@@ -174,3 +174,131 @@ public static Stream<Arguments> parameterizedTestParameters() {
 
 ## 3. Mockito
 
+> Mock이란? 모의 객체 즉, 가짜 객체를 의미한다. 실제 객체와 달리 개발자가 직접 객체의 행동을 관리할 수 있다.
+
+ Mockito는 Mocking Framework이다. Mock 객체를 쉽게 만들고 관리하고 검증할 수 있게 해준다.
+
+### 간단한 사용법
+
+#### Mockito 의존성 추가
+
+```groovy
+dependencies {
+    testImplementation "org.mockito:mockito-core:3.+"
+}
+```
+
+#### 1) mock()
+  mock() 을 통해 특정 인터페이스나 클래스를 구현하는 객체의 목(Mock)을 생성할 수 있다. 
+ 생성된 목 객체는 기본적으로 null, 0, false 등 기본값을 반환하나`when().thenReturn()`를 
+  사용하여 원하는 값을 반환하도록 동작을 설정할 수 있다. 이를 통해 테스트할 클래스가 의존하는 객체들을
+  실제로 구현하지 않고도 가짜로 만들어 테스트를 진행할 수 있다.
+
+```java
+class ExampleClass {
+    public interface CustomObject {
+        String sayHi();
+    }
+    public static void main(String[] args) {
+        CustomObject mockObj = Mockito.mock(CustomObject.class);
+        Mockito.when(mockObj::hello).thenReturn("Hi, This is mock!");
+    }
+}
+```
+
+Cf. 클래스 내부에 필드 변수로 객체를 주입받는 경우
+
+이를 Mock 객체로 대체하고자 하는 경우 `@Mock`을 사용할 수 있다.
+```java
+class ExampleObject {
+    @Mock
+    private ExmpleObject2 exmpleObject2;
+}
+```
+
+Cf. 빈(Bean)을 Mocking하는 경우
+
+실제 빈을 주입받는 경우 `@Autowired`를 사용하거나 
+클래스 자체에 `@RequiredArgsConstructor`을 추가하고 `final` 변수로 필드를 구성하기도 하지만,
+빈으로 등록하는 객체를 Mocking하는 경우 `@MockBean`을 사용할 수 있다.
+```java
+class ExampleObject {
+    @MockBean 
+    private CustomService customService;
+}
+```
+
+#### 2) spy()
+
+`spy()`는 `mock()`와는 다르게 실제 객체를 래핑(wrapping)하여 사용하기 때문에 
+필요한 경우 일부 메서드의 동작을 원하는대로 조작할 수 있다.
+
+```java
+import org.mockito.Mockito;
+
+class ExampleClass {
+    public static class CustomObject {
+        String sayHi() {
+            return "Hi, This is a real object!";
+        }
+        
+        String sayHi2() {
+            return "Hi, This is a real object!";
+        }
+    }
+    public static void main(String[] args) {
+        CustomObject realObj = new CustomObject();
+        CustomObject mockObj = Mockito.spy(realObj);
+        Mockito.when(mockObj::sayHi).thenReturn("Hi, This is a mock!");
+        
+        mockObj.sayHi(); // Hi, This is a mock!
+        mockObj.sayHi2(); // "Hi, This is a real object!"
+    }
+}
+```
+
+### 검증하기
+#### 1) verify()
+
+`verify()`를 사용하면 테스트 중에 목(Mock) 객체와의 상호작용을 검증할 수 있다. 메소드가 예상대로 호출되었는지, 호출 횟수가 맞는지, 호출 순서가 맞는지 등을 확인할 수 있다.
+
+#### 2) times()
+
+`times()`는 특정 목 객체의 메소드 호출 횟수를 검증하는데 사용된다. 테스트 중에 모의 객체와 상호작용이 예상대로 이루어지는지를 확인할 수 있다.
+
+Cf. `times()`를 사용하여 메소드 호출 횟수를 정확하게 검증할 수 있다.
+
+#### 3) ArgumentCaptor
+
+`ArgumentCaptor`는 목 객체를 사용해 메소드 호출 시 전달된 인자들을 캡처하고 추출하는 기능을 제공하는 클래스입니다. 특정 메소드가 호출될 때 전달된 인자들을 테스트 중에 검증하거나, 다른 곳에서 사용할 수 있도록 할 때 유용하게 사용됩니다.
+
+```java
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+class ExampleClass {
+    public static class CustomObject {
+        String sayValue(String value) {
+            return value;
+        }
+    }
+    
+    @Test
+    public void test1() {
+        CustomObject mockObj = Mockito.mock(CustomObject.class);
+        mockObj.sayValue("Hi");
+        
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        // 한 번 실행됨을 검증하는 경우
+        Mockito.verify(mockObj, Mockito.timeout(1000).times(1)).sayValue(captor.capture());
+
+        // 한 번도 실행되지 않음을 검증하는 경우
+        Mockito.verify(mockObj, Mockito.timeout(1000).times(0)).sayValue(captor.capture());
+
+        // 캡쳐된 값 검증
+        Assertions.assertEquals("Hi", captor.getValue());
+    }
+}
+```
